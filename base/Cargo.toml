@@ -1,0 +1,104 @@
+[package]
+name = "base"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+# ===== 对象构建器 =====
+derive_builder = { workspace = true } # 自动生成 Builder 模式
+
+# ===== 异步运行时 =====
+tokio = { workspace = true } # 异步运行时核心
+
+# ===== 数据验证 =====
+validator = { workspace = true } # 数据验证框架
+
+# ===== 日志系统 =====
+log = { workspace = true } # 日志门面接口
+
+# ===== 工作区内部模块 =====
+derive = { workspace = true } # 自定义 derive 宏（错误处理等）
+
+# ===== 序列化/反序列化 =====
+serde = { workspace = true, features = ["derive"] } # 序列化框架，启用 derive 宏支持
+serde_json = { workspace = true }                   # JSON 序列化支持
+
+# ===== 错误处理 =====
+thiserror = { workspace = true } # 自定义错误类型
+anyhow = { workspace = true }    # 通用错误处理
+
+# ===== Web 框架 =====
+axum = { workspace = true } # Web 框架
+
+# ===== 定时任务 =====
+tokio-cron-scheduler = { workspace = true } # 定时任务调度器
+
+# ===== 异步编程辅助 =====
+async-trait = { workspace = true } # trait 中支持 async fn
+
+# ===== 上下文传递 =====
+metainfo = { workspace = true } # 异步上下文元信息传递
+
+# ===== 日志实现 =====
+logforth = { workspace = true, features = [
+    "starter-log",
+    "append-fastrace",
+] } # 结构化日志，集成 fastrace
+
+# ===== 分布式追踪 =====
+fastrace = { workspace = true, features = ["enable"] } # 分布式追踪，启用功能
+
+# ===== 时间处理 =====
+jiff = { workspace = true } # 高性能日期时间处理
+
+# ===== 字符串优化 =====
+faststr = { workspace = true, features = ["serde"] } # 高性能字符串，启用 serde 支持
+
+# ===== ID 生成 =====
+yit_id_generator = { workspace = true } # 分布式唯一 ID 生成器
+
+# ===== 随机数生成 =====
+rand = { workspace = true } # 随机数生成
+
+# ===== 网络工具 =====
+get_if_addrs = { workspace = true } # 获取网络接口地址
+
+# ===== 数字格式化 =====
+itoa = { workspace = true } # 整数转字符串
+
+# ===== 时间优化 =====
+coarsetime = { workspace = true } # 高性能时间戳
+
+# ===== 编码转换 =====
+hex = { workspace = true } # 十六进制编码/解码
+
+# ===== HTTP 工具 =====
+http-body-util = { workspace = true } # HTTP body 处理
+
+# ===== 字节处理 =====
+bytesize = { workspace = true } # 字节大小格式化
+
+# ===== JWT 认证 =====
+jsonwebtoken = { workspace = true } # JWT 编解码
+
+# ===== Tower 服务抽象 =====
+tower = { workspace = true } # Tower 服务层
+
+# ===== Tower HTTP 中间件 =====
+tower-http = { workspace = true, features = [
+    "trace",          # 请求追踪中间件
+    "timeout",        # 超时控制中间件
+    "request-id",     # 请求 ID 中间件
+    "cors",           # CORS 跨域中间件
+    "limit",          # 请求体大小限制中间件
+    "normalize-path", # 路径规范化中间件
+] }
+
+# ===== Axum 追踪集成 =====
+fastrace-axum = { workspace = true } # fastrace 与 Axum 集成
+
+# ===== 密码加密 =====
+bcrypt = { workspace = true } # bcrypt 密码哈希
+
+# ===== 配置管理 =====
+config = { workspace = true } # 统一配置管理

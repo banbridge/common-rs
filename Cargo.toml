@@ -1,0 +1,126 @@
+[workspace]
+members = ["derive", "infra", "base"]
+
+resolver = "3"
+
+[workspace.dependencies]
+# ===== 过程宏相关依赖 =====
+syn = "2"         # Rust 语法树解析
+quote = "1"       # Rust token 流生成
+darling = "0.23"  # 派生宏属性解析辅助库
+proc-macro2 = "1" # 过程宏 token 流处理
+
+# ===== 错误处理与工具库 =====
+anyhow = "1"      # 通用错误类型，用于应用程序层错误处理
+thiserror = "2"   # 自定义错误类型的 derive 宏
+unescaper = "0.1" # 字符串转义处理工具
+
+# ===== 序列化/反序列化 =====
+serde = "1"      # Rust 序列化框架核心库，支持 JSON、YAML 等格式
+serde_json = "1" # JSON 格式的 serde 实现
+
+# ===== 代码生成辅助 =====
+heck = "0.5" # 大小写转换工具（如 camelCase、snake_case）
+
+# ===== ORM 数据库 =====
+sea-orm = "2.0.0-rc" # 异步 ORM 框架，支持 PostgreSQL、MySQL、SQLite
+
+# ===== 对象构建器 =====
+derive_builder = "0.20" # 自动生成 Builder 模式的 derive 宏
+
+# ===== 工作区内部模块 =====
+base = { path = "base" }     # 基础功能模块（HTTP、日志、追踪等）
+infra = { path = "infra" }   # 基础设施模块（数据库、缓存、认证等）
+derive = { path = "derive" } # 过程宏模块（自定义 derive 宏）
+
+# ===== 异步运行时 =====
+tokio = { version = "1" } # 异步运行时，提供 async/await 执行环境
+
+# ===== 数据验证 =====
+validator = "0.20" # 数据验证框架，支持结构体字段验证
+
+# ===== 日志系统 =====
+log = "0.4"       # Rust 标准日志门面接口
+logforth = "0.29" # 结构化日志框架，支持多种输出格式
+
+# ===== 时间处理 =====
+jiff = "0.2" # 高性能日期时间处理库
+
+# ===== 分布式追踪 =====
+fastrace = { version = "0.7" } # 高性能分布式追踪库，支持 OpenTelemetry
+fastrace-axum = "0.2"          # fastrace 与 Axum 的集成中间件
+
+# ===== 异步编程辅助 =====
+async-trait = "0.1" # 允许在 trait 中使用 async fn
+
+# ===== 权限认证 =====
+casbin = "2" # RBAC 访问控制模型实现
+
+# ===== 资源嵌入 =====
+rust-embed = "8" # 编译时将静态资源嵌入二进制文件
+
+# ===== 缓存系统 =====
+moka = "0.12" # 高性能本地缓存库，支持 TTL 和 LRU
+
+# ===== 连接池 =====
+bb8 = "0.9"        # 通用异步连接池框架，适用于各种数据库和 Redis
+bb8-redis = "0.26" # bb8 连接池的 Redis 适配器
+
+# ===== Redis 客户端 =====
+redis = "1" # Redis 客户端库，支持异步操作
+
+# ===== 定时任务 =====
+tokio-cron-scheduler = "0.15" # 基于 tokio 的定时任务调度器
+
+# ===== 系统信息 =====
+num_cpus = "1" # 获取 CPU 核心数
+
+# ===== Web 框架 =====
+axum = { version = "0.8" } # 现代化的 Rust Web 框架，基于 tower
+
+# ===== 环境变量配置 =====
+dotenv = "0.15" # 从 .env 文件加载环境变量
+
+# ===== 上下文传递 =====
+metainfo = "0.7" # 异步上下文元信息传递库
+
+# ===== 字符串优化 =====
+faststr = "0.2" # 高性能字符串类型，针对常见场景优化
+
+# ===== 网络工具 =====
+get_if_addrs = "0.5" # 获取网络接口地址
+
+# ===== 编码转换 =====
+hex = "0.4" # 十六进制编码/解码工具
+
+# ===== 数字格式化 =====
+itoa = "1" # 高性能整数转字符串
+
+# ===== 时间优化 =====
+coarsetime = "0.1" # 低精度但高性能的时间戳，适合监控场景
+
+# ===== ID 生成 =====
+yit_id_generator = "1" # 分布式唯一 ID 生成器
+
+# ===== 随机数生成 =====
+rand = "0.10" # 随机数生成库
+
+# ===== HTTP 工具 =====
+http-body-util = "0.1" # HTTP body 处理工具库
+
+# ===== 配置管理 =====
+config = "0.15" # 统一的配置管理框架，支持多格式
+
+# ===== Tower 中间件 =====
+tower-http = "0.6" # Tower HTTP 中间件集合
+tower = "0.5"      # Tower 服务抽象层
+
+# ===== 字节处理 =====
+bytesize = "2" # 人类可读的字节大小格式化
+bytes = "1"    # 高效的字节序列处理库
+
+# ===== JWT 认证 =====
+jsonwebtoken = "10" # JWT (JSON Web Token) 编解码库
+
+# ===== 密码加密 =====
+bcrypt = "0.19" # bcrypt 密码哈希算法实现

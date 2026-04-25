@@ -1,0 +1,40 @@
+[build]
+jobs = 8
+# rustc-wrapper = "sccache"
+# 针对当前 CPU 架构进行优化
+rustflags = ["-C", "target-cpu=native"]
+
+# 为 x86_64 musl 目标使用 lld 链接器
+[target.x86_64-unknown-linux-musl]
+rustflags = ["-C", "link-args=-fuse-ld=lld"]
+
+# 为 aarch64 GNU 目标使用 lld 链接器
+[target.aarch64-unknown-linux-gnu]
+rustflags = ["-C", "link-args=-fuse-ld=lld"]
+
+# 为 aarch64 musl 目标使用 lld 链接器
+[target.aarch64-unknown-linux-musl]
+rustflags = ["-C", "link-args=-fuse-ld=lld"]
+
+[profile.dev.package."*"]
+opt-level = 1
+
+[profile.dev]
+incremental = true
+
+[registries.crates-io]
+replace-with = "ustc"
+
+[registries.ustc]
+url = "https://mirrors.ustc.edu.cn/crates.io-index"
+
+[profile.release]
+# 最高优化级别
+opt-level = 3
+# 剥离调试符号，减小二进制体积
+strip = true
+# 开启链接时优化（Link-Time Optimization）
+lto = true
+# 使用单个代码生成单元，提升优化效果
+codegen-units = 1
+
