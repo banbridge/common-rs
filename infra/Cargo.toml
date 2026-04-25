@@ -1,0 +1,52 @@
+[package]
+name = "infra"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+# ===== 序列化/反序列化 =====
+serde = { workspace = true, features = ["derive"] } # 序列化框架，启用 derive 宏支持
+serde_json = { workspace = true }                   # JSON 序列化支持
+
+# ===== 异步运行时 =====
+tokio = { workspace = true, features = ["full"] } # 异步运行时，启用全部功能
+
+# ===== ORM 数据库 =====
+sea-orm = { workspace = true, features = [
+    "runtime-tokio-rustls", # 使用 tokio + rustls TLS 运行时
+    "sqlx-postgres",        # PostgreSQL 数据库驱动
+] }
+
+# ===== 系统信息 =====
+num_cpus = { workspace = true } # 获取 CPU 核心数
+
+# ===== 工作区内部模块 =====
+base = { workspace = true } # 基础功能模块
+
+# ===== 连接池 =====
+bb8 = { workspace = true }       # 通用异步连接池框架
+bb8-redis = { workspace = true } # Redis 连接池适配器
+
+# ===== Redis 客户端 =====
+redis = { workspace = true, features = ["tokio-comp"] } # Redis 客户端，启用 tokio 支持
+
+# ===== 缓存系统 =====
+moka = { workspace = true, features = ["future"] } # 本地缓存库，启用异步 API
+
+# ===== 异步编程辅助 =====
+async-trait = { workspace = true } # trait 中支持 async fn
+
+# ===== 数据验证 =====
+validator = { workspace = true, features = ["derive"] } # 数据验证框架，启用 derive 宏
+
+# ===== 错误处理 =====
+anyhow = { workspace = true } # 通用错误处理
+
+# ===== 权限认证 =====
+casbin = { workspace = true } # RBAC 访问控制模型
+
+# ===== 资源嵌入 =====
+rust-embed = { workspace = true } # 编译时嵌入静态资源（如 casbin 模型配置）
+
+# ===== 环境变量配置 =====
+dotenv = { workspace = true } # 从 .env 文件加载环境变量

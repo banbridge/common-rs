@@ -1,0 +1,25 @@
+[package]
+name = "derive"
+version = "0.0.1"
+edition = "2024"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+# ===== 过程宏核心依赖 =====
+syn = { workspace = true, features = ["full"] } # Rust 语法树解析，启用完整功能
+quote = { workspace = true }                    # Rust token 流生成
+darling = { workspace = true }                  # 派生宏属性解析辅助库
+proc-macro2 = { workspace = true }              # 过程宏 token 流处理
+
+# ===== 错误处理 =====
+anyhow = { workspace = true }    # 通用错误处理
+thiserror = { workspace = true } # 自定义错误类型
+
+# ===== 序列化/反序列化 =====
+serde = { workspace = true, features = ["derive"] } # 序列化框架，启用 derive 宏支持
+
+# ===== 代码生成辅助 =====
+unescaper = { workspace = true } # 字符串转义处理
+heck = { workspace = true }      # 大小写转换工具

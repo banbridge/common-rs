@@ -1,0 +1,22 @@
+style_edition = "2024"
+
+max_width = 100                   # 设置最大行宽为 100 个字符
+tab_spaces = 4                   # 设置缩进宽度为 4 个空格
+edition = "2024"                  # 设置 Rust 版本（根据实际项目版本进行调整）
+use_small_heuristics = "Default"      # 设置换行策略
+newline_style = "Auto"            # 设置换行符风格，根据平台自动选择
+reorder_modules = true
+
+group_imports = "StdExternalCrate" #  设置导入分组
+
+reorder_imports = true # 按字母顺序排序
+
+imports_granularity = "Crate" # 合并相同的路径导入
+
+format_strings = true
+wrap_comments = true
+
+blank_lines_upper_bound = 2  # 代码块（函数/结构体/模块等）之间最多2行空行
+#blank_lines_lower_bound = 1  # 配套配置：代码块之间最少1行空行（可选，默认1）
+
+merge_derives = true # 合并派生项
