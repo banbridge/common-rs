@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use base::error::{AppErrorBuilt, AppResult};
 use sea_orm::{
-    Condition, ConnectionTrait, EntityTrait, PaginatorTrait, QueryFilter, prelude::*,
-    sea_query::OnConflict,
+    Condition, ConnectionTrait, DatabaseTransaction, EntityTrait, PaginatorTrait, QueryFilter,
+    TransactionTrait, prelude::*, sea_query::OnConflict,
 };
 
 #[allow(dead_code)]
@@ -205,4 +205,23 @@ where
         })?;
 
     Ok(res)
+}
+
+
+pub async fn with_shared_txn<T, F>(connection: &DatabaseConnection, f: F) -> AppResult<T>
+where
+    F: for<'a> FnOnce(
+        &'a DatabaseTransaction,
+    ) -> std::pin::Pin<
+        Box<dyn std::future::Future<Output = AppResult<T>> + Send + 'a>,
+    >,
+{
+    let txn = connection.begin().await.map_err(|e| {
+        AppErrorBuilt::db_transaction_begin_failed(format!("begin transaction failed: {:?}", e))
+    })?;
+    let result = f(&txn).await?;
+    txn.commit().await.map_err(|e| {
+        AppErrorBuilt::db_transaction_commit_failed(format!("commit transaction failed: {:?}", e))
+    })?;
+    Ok(result)
 }
