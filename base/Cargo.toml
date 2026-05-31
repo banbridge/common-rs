@@ -102,3 +102,5 @@ bcrypt = { workspace = true } # bcrypt 密码哈希
 
 # ===== 配置管理 =====
 config = { workspace = true } # 统一配置管理
+
+getset = { workspace = true } # 自动生成 getter/setter 宏

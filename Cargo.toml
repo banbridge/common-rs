@@ -124,3 +124,5 @@ jsonwebtoken = "10" # JWT (JSON Web Token) 编解码库
 
 # ===== 密码加密 =====
 bcrypt = "0.19" # bcrypt 密码哈希算法实现
+
+getset = "0.1"
