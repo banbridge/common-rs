@@ -23,7 +23,9 @@ serde_json = "1" # JSON 格式的 serde 实现
 heck = "0.5" # 大小写转换工具（如 camelCase、snake_case）
 
 # ===== ORM 数据库 =====
-sea-orm = "2.0.0-rc" # 异步 ORM 框架，支持 PostgreSQL、MySQL、SQLite
+toasty = { version = "0.7", features = [
+    "postgresql",
+] } # 异步 ORM 框架，支持 PostgreSQL
 
 # ===== 对象构建器 =====
 derive_builder = "0.20" # 自动生成 Builder 模式的 derive 宏

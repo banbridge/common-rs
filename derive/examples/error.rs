@@ -15,9 +15,9 @@ fn main() {
 
     let c = BanbridgeErrorBuilt::invalid_email("sa".to_string());
 
-    let c = c.with_kv("key".to_string(), "value".to_string());
+    let c = c.with_context("key".to_string(), "value".to_string());
 
-    println!("{}", c.get_message());
+    println!("{}", c);
 }
 
 // fn print_stack() {
