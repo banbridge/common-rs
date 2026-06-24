@@ -1,4 +1,5 @@
 use derive::BizError;
+use std::error::Error;
 
 #[derive(BizError, Debug)]
 enum BanbridgeError {
@@ -17,7 +18,7 @@ fn main() {
 
     let c = c.with_context("key".to_string(), "value".to_string());
 
-    println!("{}", c);
+    println!("{:?}", c.source());
 }
 
 // fn print_stack() {

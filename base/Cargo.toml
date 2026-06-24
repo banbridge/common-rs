@@ -100,6 +100,13 @@ fastrace-axum = { workspace = true } # fastrace 与 Axum 集成
 # ===== 密码加密 =====
 bcrypt = { workspace = true } # bcrypt 密码哈希
 
+# ===== 加密/哈希 =====
+md-5 = { workspace = true }    # MD5 哈希
+sha2 = { workspace = true }    # SHA-2 系列哈希
+hmac = { workspace = true }    # HMAC 消息认证码
+aes-gcm = { workspace = true } # AES-GCM 对称加密
+base64 = { workspace = true }  # Base64 编解码
+
 # ===== 配置管理 =====
 config = { workspace = true } # 统一配置管理
 

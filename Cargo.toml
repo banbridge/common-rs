@@ -127,4 +127,11 @@ jsonwebtoken = "10" # JWT (JSON Web Token) 编解码库
 # ===== 密码加密 =====
 bcrypt = "0.19" # bcrypt 密码哈希算法实现
 
+# ===== 加密/哈希 =====
+md-5 = "0.10"     # MD5 哈希算法
+sha2 = "0.10"     # SHA-2 系列哈希算法（SHA256, SHA512）
+hmac = "0.12"     # HMAC 消息认证码
+aes-gcm = "0.10"  # AES-GCM 对称加密
+base64 = "0.22"   # Base64 编解码
+
 getset = "0.1"
