@@ -7,7 +7,6 @@ pub mod jwt;
 pub mod log_id;
 pub mod middle;
 pub mod param;
-#[deprecated(note = "use `crypto` module instead")]
-pub mod password;
-pub mod response;
+
+pub mod api_response;
 pub mod util;

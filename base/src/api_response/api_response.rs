@@ -13,7 +13,33 @@ pub struct ResponseMetadata {
     request_id: FastStr,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    error: Option<AppErrorBuilt>,
+    error: Option<AppError>,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "PascalCase")]
+pub struct AppError {
+    code: u64,
+    message: String,
+
+    message_code: String,
+    message_zh: String,
+
+    #[serde(skip)]
+    http_status: u16,
+}
+
+impl From<AppErrorBuilt> for AppError {
+    fn from(err: AppErrorBuilt) -> Self {
+        AppError {
+            code: err.code(),
+            message: err.message().to_string(),
+            message_code: err.biz_message().to_string(),
+            message_zh: err.message_zh().to_string(),
+
+            http_status: err.get_http_status(),
+        }
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -38,12 +64,6 @@ where
     }
 }
 
-impl IntoResponse for AppErrorBuilt {
-    fn into_response(self) -> axum::response::Response {
-        ApiResponse::<()>::err(self).into_response()
-    }
-}
-
 impl<T> ApiResponse<T>
 where
     T: Serialize,
@@ -63,6 +83,8 @@ where
     }
 
     pub fn err(err: AppErrorBuilt) -> Self {
+        let err = err.into();
+
         ApiResponse {
             response_metadata: Self::build_metadata(Some(err)),
             data: None,
@@ -71,13 +93,13 @@ where
 
     fn status_code(&self) -> StatusCode {
         if let Some(err) = &self.response_metadata.error {
-            StatusCode::from_u16(err.get_http_status()).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR)
+            StatusCode::from_u16(err.http_status).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR)
         } else {
             StatusCode::OK
         }
     }
 
-    fn build_metadata(biz_error: Option<AppErrorBuilt>) -> ResponseMetadata {
+    fn build_metadata(biz_error: Option<AppError>) -> ResponseMetadata {
         let log_id = log_id::get_or_default_log_id();
         ResponseMetadata {
             request_id: log_id,
@@ -95,6 +117,12 @@ where
             Ok(data) => ApiResponse::ok_with_data(data),
             Err(err) => ApiResponse::err(err),
         }
+    }
+}
+
+impl IntoResponse for AppErrorBuilt {
+    fn into_response(self) -> axum::response::Response {
+        ApiResponse::<()>::err(self).into_response()
     }
 }
 

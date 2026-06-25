@@ -5,15 +5,19 @@ use crate::error::{AppErrorBuilt, AppResult};
 pub struct BcryptEncoder;
 
 impl BcryptEncoder {
-    pub fn encode(&self, password: FastStr) -> AppResult<FastStr> {
+    pub fn encode<P: AsRef<[u8]>>(&self, password: P) -> AppResult<String> {
         let hash = bcrypt::hash(password, bcrypt::DEFAULT_COST)
             .map_err(|err| AppErrorBuilt::bcrypt_failed(err.to_string().into()))?;
 
         Ok(hash.into())
     }
 
-    pub fn matches(&self, raw_password: FastStr, encoded_password: FastStr) -> AppResult<bool> {
-        bcrypt::verify(raw_password, encoded_password.as_str())
+    pub fn matches<P: AsRef<[u8]>>(
+        &self,
+        raw_password: P,
+        encoded_password: &str,
+    ) -> AppResult<bool> {
+        bcrypt::verify(raw_password, encoded_password)
             .map_err(|err| AppErrorBuilt::bcrypt_failed(err.to_string().into()))
     }
 }
@@ -30,7 +34,7 @@ mod tests {
 
         println!("hash_password: {}", hash_password);
 
-        let result = BcryptEncoder.matches(password, hash_password);
+        let result = BcryptEncoder.matches(password, hash_password.as_str());
 
         assert!(result.is_ok());
 
