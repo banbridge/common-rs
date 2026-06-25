@@ -23,7 +23,9 @@ serde_json = "1" # JSON 格式的 serde 实现
 heck = "0.5" # 大小写转换工具（如 camelCase、snake_case）
 
 # ===== ORM 数据库 =====
-sea-orm = "2.0.0-rc" # 异步 ORM 框架，支持 PostgreSQL、MySQL、SQLite
+toasty = { version = "0.7", features = [
+    "postgresql",
+] } # 异步 ORM 框架，支持 PostgreSQL
 
 # ===== 对象构建器 =====
 derive_builder = "0.20" # 自动生成 Builder 模式的 derive 宏
@@ -34,10 +36,10 @@ infra = { path = "infra" }   # 基础设施模块（数据库、缓存、认证�
 derive = { path = "derive" } # 过程宏模块（自定义 derive 宏）
 
 # ===== 异步运行时 =====
-tokio = { version = "1" } # 异步运行时，提供 async/await 执行环境
+tokio = { version = "1", features = ["signal"] } # 异步运行时，提供 async/await 执行环境
 
 # ===== 数据验证 =====
-validator = "0.20" # 数据验证框架，支持结构体字段验证
+validator = { version = "0.20", features = ["derive"] } # 数据验证框架，支持结构体字段验证
 
 # ===== 日志系统 =====
 log = "0.4"       # Rust 标准日志门面接口
@@ -124,3 +126,12 @@ jsonwebtoken = "10" # JWT (JSON Web Token) 编解码库
 
 # ===== 密码加密 =====
 bcrypt = "0.19" # bcrypt 密码哈希算法实现
+
+# ===== 加密/哈希 =====
+md-5 = "0.10"    # MD5 哈希算法
+sha2 = "0.10"    # SHA-2 系列哈希算法（SHA256, SHA512）
+hmac = "0.12"    # HMAC 消息认证码
+aes-gcm = "0.10" # AES-GCM 对称加密
+base64 = "0.22"  # Base64 编解码
+
+getset = "0.1"

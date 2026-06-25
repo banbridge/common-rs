@@ -7,5 +7,5 @@ mod types;
 
 pub use ::metainfo::MetaInfo;
 pub use request_id::*;
-pub use trace::init_log;
+pub use trace::{TraceConfig, init_log};
 pub use types::*;

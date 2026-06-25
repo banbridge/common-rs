@@ -104,15 +104,16 @@ fn gen_error_struct(ident: &Ident) -> TokenStream {
         pub struct #new_ident {
             biz_code: u64,
             message: String,
+            #[serde(skip)]
             http_status: u16,
             biz_message: String,
             message_zh: String,
             #[serde(skip)]
             base: Option<anyhow::Error>,
             #[serde(skip)]
-            stack: Option<std::backtrace::Backtrace>,
+            backtrace: Option<std::backtrace::Backtrace>,
             #[serde(skip)]
-            kv: std::collections::HashMap<String, String>,
+            context: std::collections::HashMap<String, String>,
         }
 
     };
@@ -135,11 +136,38 @@ fn gen_error_struct_methods(ident: &Ident, data_error: &DetailErrorEnum) -> Toke
 
         }
 
-        impl std::fmt::Display for #new_ident{
+        impl std::fmt::Display for #new_ident {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f,
-            "  http_status: {}, message: {}, biz_code: {}, biz_message: {} base: {:?}",
-            self.http_status, self.message, self.biz_code, self.biz_message, self.base)
+                let context_str = self
+                    .context
+                    .iter()
+                    .map(|(k, v)| format!("{}={}", k, v))
+                    .collect::<Vec<_>>()
+                    .join(", ");
+                if context_str.is_empty() {
+                    write!(f, "[{}] {} - {}", self.biz_code, self.message_zh, self.message)
+                } else {
+                    write!(f, "[{}] {} - {} (context: {})", self.biz_code, self.message_zh, self.message, context_str)
+                }
+            }
+        }
+
+        // impl std::error::Error for #new_ident {
+        //     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        //         self.base.as_ref().map(|e| e.as_ref())
+        //     }
+        // }
+
+        impl From<#ident> for #new_ident {
+            fn from(e: #ident) -> Self {
+                let message = e.get_message_zh();
+                #new_ident::new(
+                    e.get_code(),
+                    message.clone(),
+                    e.get_http_status(),
+                    e.get_biz_message(),
+                    message,
+                )
             }
         }
 
@@ -158,43 +186,70 @@ fn get_struct_base_method() -> TokenStream {
                 biz_message,
                 message_zh,
                 base: None,
-                stack: None,
-                kv: std::collections::HashMap::new(),
+                backtrace: None,
+                context: std::collections::HashMap::new(),
             }
         }
 
-        pub fn with_base(mut self, base: anyhow::Error) -> Self {
-            self.message = format!("{}, base error is {:?}", self.message, base);
-            self.base = Some(base);
+        pub fn with_source(mut self, source: anyhow::Error) -> Self {
+            self.base = Some(source);
             self
         }
 
-        pub fn with_stack(mut self) -> Self {
-            self.stack = Some(std::backtrace::Backtrace::capture());
+        pub fn with_backtrace(mut self) -> Self {
+            self.backtrace = Some(std::backtrace::Backtrace::capture());
             self
         }
 
-        pub fn with_kv(mut self, key: String, value: String) -> Self {
-            self.kv.insert(key, value);
+        pub fn with_context(mut self, key: String, value: String) -> Self {
+            self.context.insert(key, value);
             self
         }
 
-        pub fn with_kvs(mut self, kvs: Vec<(String, String)>) -> Self {
-            for (k, v) in kvs {
-                self.kv.insert(k, v);
+        pub fn with_contexts(mut self, contexts: Vec<(String, String)>) -> Self {
+            for (k, v) in contexts {
+                self.context.insert(k, v);
             }
             self
+        }
+
+        pub fn message(&self) -> &str {
+            &self.message
+        }
+
+        pub fn code(&self) -> u64 {
+            self.biz_code
+        }
+
+        pub fn status(&self) -> u16 {
+            self.http_status
+        }
+
+        pub fn biz_message(&self) -> &str {
+            &self.biz_message
+        }
+
+        pub fn message_zh(&self) -> &str {
+            &self.message_zh
+        }
+
+        pub fn source_error(&self) -> Option<&anyhow::Error> {
+            self.base.as_ref()
+        }
+
+        pub fn context_ref(&self) -> &std::collections::HashMap<String, String> {
+            &self.context
         }
 
         pub fn get_message(&self) -> String {
-            let kv_str = self
-                .kv
+            let context_str = self
+                .context
                 .iter()
                 .map(|(k, v)| format!("{}={}", k, v))
                 .collect::<Vec<_>>()
                 .join(",");
 
-            format!("{} {} {}", self.message, kv_str, self.biz_message)
+            format!("{} {} {}", self.message, context_str, self.biz_message)
         }
 
         pub fn get_base(&self) -> Option<&anyhow::Error> {
@@ -211,6 +266,12 @@ fn get_struct_base_method() -> TokenStream {
 
         pub fn get_biz_message(&self) -> &str {
             self.biz_message.as_str()
+        }
+
+        pub fn with_base(mut self, mut base: anyhow::Error) -> Self {
+            self.message = format!("{}, base error is {:?}", self.message, &base);
+            self.base = Some(base);
+            self
         }
 
     }

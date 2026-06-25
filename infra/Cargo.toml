@@ -12,10 +12,7 @@ serde_json = { workspace = true }                   # JSON 序列化支持
 tokio = { workspace = true, features = ["full"] } # 异步运行时，启用全部功能
 
 # ===== ORM 数据库 =====
-sea-orm = { workspace = true, features = [
-    "runtime-tokio-rustls", # 使用 tokio + rustls TLS 运行时
-    "sqlx-postgres",        # PostgreSQL 数据库驱动
-] }
+toasty = { workspace = true } # toasty ORM 框架
 
 # ===== 系统信息 =====
 num_cpus = { workspace = true } # 获取 CPU 核心数
