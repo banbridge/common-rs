@@ -11,8 +11,8 @@ pub fn gen_uniq_id() -> String {
 }
 
 impl UniqIdGenerator {
-    pub fn new() -> Self {
-        let mut options = IdGeneratorOptions::New(1);
+    pub fn new(worker_id: u32) -> Self {
+        let mut options = IdGeneratorOptions::New(worker_id);
 
         options.WorkerIdBitLength = 13;
 
@@ -28,7 +28,7 @@ impl UniqIdGenerator {
 
 impl Default for UniqIdGenerator {
     fn default() -> Self {
-        Self::new()
+        Self::new(1)
     }
 }
 

@@ -3,12 +3,15 @@ use serde::Deserialize;
 
 use crate::error::{AppErrorBuilt, AppResult};
 
-pub fn load_config<'a, T>(file_name: &str, format: FileFormat) -> AppResult<T>
+pub fn load_config<'a, T>(file_name: Option<&str>, format: FileFormat) -> AppResult<T>
 where
     T: Deserialize<'a>,
 {
-    let settings = Config::builder()
-        .add_source(File::with_name(file_name).format(format))
+    let mut settings = Config::builder();
+    if let Some(file_name) = file_name {
+        settings = settings.add_source(File::with_name(file_name).format(format));
+    }
+    let config = settings
         .add_source(
             Environment::with_prefix("APP")
                 .separator("__")
@@ -24,5 +27,5 @@ where
                 .with_base(e.into())
         })?;
 
-    Ok(settings)
+    Ok(config)
 }

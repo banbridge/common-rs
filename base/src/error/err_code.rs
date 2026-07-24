@@ -81,36 +81,108 @@ pub enum AppError {
     CasbinFailed,
     #[detail(code = 1020006, http_status = 403, message_zh = "用户无权限访问该资源")]
     NoAuthResource,
+    #[detail(code = 1020007, http_status = 401, message_zh = "JWT Token 过期")]
+    JwtTokenExpired, // JWT Token 过期
+
+    // 用户登录相关错误码
+    #[detail(code = 1020100, http_status = 401, message_zh = "登录失败")]
+    LoginFailed,
+    #[detail(code = 1020101, http_status = 401, message_zh = "账号不存在")]
+    AccountNotFound,
+    #[detail(code = 1020102, http_status = 401, message_zh = "账号已被禁用")]
+    AccountDisabled,
+    #[detail(code = 1020103, http_status = 401, message_zh = "账号已被锁定")]
+    AccountLocked,
+    #[detail(code = 1020104, http_status = 401, message_zh = "账号未激活")]
+    AccountInactive,
+    #[detail(
+        code = 1020105,
+        http_status = 401,
+        message_zh = "登录尝试次数过多，请稍后重试"
+    )]
+    LoginAttemptsExceeded,
+    #[detail(code = 1020106, http_status = 401, message_zh = "验证码错误")]
+    CaptchaInvalid,
+    #[detail(code = 1020107, http_status = 401, message_zh = "验证码已过期")]
+    CaptchaExpired,
+    #[detail(code = 1020108, http_status = 401, message_zh = "设备不匹配")]
+    DeviceMismatch,
+    #[detail(code = 1020109, http_status = 401, message_zh = "异地登录风险")]
+    RiskyLoginLocation,
+    #[detail(
+        code = 1020110,
+        http_status = 401,
+        message_zh = "密码已过期，请修改密码"
+    )]
+    PasswordExpired,
+    #[detail(code = 1020111, http_status = 401, message_zh = "密码强度不足")]
+    PasswordStrengthInsufficient,
+    #[detail(code = 1020112, http_status = 401, message_zh = "旧密码错误")]
+    OldPasswordIncorrect,
+    #[detail(
+        code = 1020113,
+        http_status = 401,
+        message_zh = "新密码不能与旧密码相同"
+    )]
+    PasswordSameAsOld,
+    #[detail(code = 1020114, http_status = 401, message_zh = "账号已在其他设备登录")]
+    AccountLoggedInElsewhere,
+    #[detail(code = 1020115, http_status = 401, message_zh = "登录超时")]
+    LoginTimeout,
 
     // 数据库相关错误吗
     #[detail(code = 1030000, http_status = 500, message_zh = "数据库错误")]
     DBCommon, // 数据库错误
-    #[detail(code = 1030001, http_status = 404, message_zh = "数据库记录未找到")]
+    #[detail(
+        code = 1030001,
+        http_status = 404,
+        message_zh = "记录未找到，请检查对应参数"
+    )]
     DBNotFound, // 数据库未找到
-    #[detail(code = 1030002, http_status = 500, message_zh = "数据库查询失败")]
+    #[detail(code = 1030002, http_status = 500, message_zh = "查询失败，请稍后重试")]
     DBQueryFailed, // 数据库查询失败
-    #[detail(code = 1030003, http_status = 500, message_zh = "数据库更新失败")]
+    #[detail(code = 1030003, http_status = 500, message_zh = "更新失败，请稍后重试")]
     DBUpdateFailed, // 数据库更新失败
-    #[detail(code = 1030004, http_status = 500, message_zh = "数据库插入失败")]
+    #[detail(code = 1030004, http_status = 500, message_zh = "插入失败，请稍后重试")]
     DBInsertFailed, // 插入数据库失败
-    #[detail(code = 1030005, http_status = 500, message_zh = "数据库删除失败")]
+    #[detail(code = 1030005, http_status = 500, message_zh = "删除失败，请稍后重试")]
     DBDeleteFailed, // 删除数据库失败
-    #[detail(code = 1030006, http_status = 500, message_zh = "数据库连接失败")]
+    #[detail(code = 1030006, http_status = 500, message_zh = "连接失败，请稍后重试")]
     DBConnectionFailed,
-    #[detail(code = 1030007, http_status = 500, message_zh = "数据库事务开启")]
+    #[detail(
+        code = 1030007,
+        http_status = 500,
+        message_zh = "事务开启失败，请稍后重试"
+    )]
     DBTransactionBeginFailed,
-    #[detail(code = 1030008, http_status = 500, message_zh = "数据库事务提交失败")]
+    #[detail(
+        code = 1030008,
+        http_status = 500,
+        message_zh = "事务提交失败，请稍后重试"
+    )]
     DBTransactionCommitFailed,
 
     #[detail(code = 1040000, http_status = 400, message_zh = "缓存错误")]
     CacheCommon,
-    #[detail(code = 1040001, http_status = 500, message_zh = "redis查询错误")]
+    #[detail(
+        code = 1040001,
+        http_status = 500,
+        message_zh = "缓存查询失败，请稍后重试"
+    )]
     CacheQueryFailed,
-    #[detail(code = 1040002, http_status = 500, message_zh = "redis设置错误")]
+    #[detail(
+        code = 1040002,
+        http_status = 500,
+        message_zh = "缓存设置失败，请稍后重试"
+    )]
     CacheSetFailed,
-    #[detail(code = 1040003, http_status = 500, message_zh = "redis删除错误")]
+    #[detail(
+        code = 1040003,
+        http_status = 500,
+        message_zh = "缓存删除失败，请稍后重试"
+    )]
     CacheDeleteFailed,
-    #[detail(code = 1040004, http_status = 500, message_zh = "获取redis连接错误")]
+    #[detail(code = 1040004, http_status = 500, message_zh = "获取连接失败")]
     CacheConnectionFailed,
 
     // agent 相关错误码
