@@ -40,6 +40,8 @@ fn gen_error_enum(ident: &Ident, data_error: &DetailErrorEnum) -> TokenStream {
 
     let mut message_zh_list: Vec<TokenStream> = vec![];
 
+    let mut message_en_list: Vec<TokenStream> = vec![];
+
     let mut code_list: Vec<TokenStream> = vec![];
 
     enum_data.into_iter().for_each(|item| {
@@ -50,6 +52,7 @@ fn gen_error_enum(ident: &Ident, data_error: &DetailErrorEnum) -> TokenStream {
         let code = item.code;
 
         let message_zh: String = item.message_zh.clone().unwrap_or_default();
+        let message_en: String = item.message_en.clone().unwrap_or_default();
 
         http_status_list.push(quote! {#ident::#item_ident => #http_status});
 
@@ -58,6 +61,7 @@ fn gen_error_enum(ident: &Ident, data_error: &DetailErrorEnum) -> TokenStream {
         code_list.push(quote! {#ident::#item_ident => #code});
 
         message_zh_list.push(quote! {#ident::#item_ident => #message_zh.to_string()});
+        message_en_list.push(quote! {#ident::#item_ident => #message_en.to_string()});
     });
 
     quote! {
@@ -85,6 +89,12 @@ fn gen_error_enum(ident: &Ident, data_error: &DetailErrorEnum) -> TokenStream {
                     #(#message_zh_list,)*
                 }
             }
+
+            pub fn get_message_en(&self) -> String {
+                match self {
+                    #(#message_en_list,)*
+                }
+            }
         }
 
         impl std::fmt::Display for #ident {
@@ -108,6 +118,7 @@ fn gen_error_struct(ident: &Ident) -> TokenStream {
             http_status: u16,
             biz_message: String,
             message_zh: String,
+            message_en: String,
             #[serde(skip)]
             base: Option<anyhow::Error>,
             #[serde(skip)]
@@ -167,6 +178,7 @@ fn gen_error_struct_methods(ident: &Ident, data_error: &DetailErrorEnum) -> Toke
                     e.get_http_status(),
                     e.get_biz_message(),
                     message,
+                    e.get_message_en(),
                 )
             }
         }
@@ -178,13 +190,14 @@ fn gen_error_struct_methods(ident: &Ident, data_error: &DetailErrorEnum) -> Toke
 
 fn get_struct_base_method() -> TokenStream {
     quote! {
-        pub fn new(biz_code: u64, message: String, http_status: u16, biz_message: String, message_zh: String) -> Self {
+        pub fn new(biz_code: u64, message: String, http_status: u16, biz_message: String, message_zh: String, message_en: String) -> Self {
             Self {
                 biz_code,
                 message,
                 http_status,
                 biz_message,
                 message_zh,
+                message_en,
                 base: None,
                 backtrace: None,
                 context: std::collections::HashMap::new(),
@@ -231,6 +244,10 @@ fn get_struct_base_method() -> TokenStream {
 
         pub fn message_zh(&self) -> &str {
             &self.message_zh
+        }
+
+        pub fn message_en(&self) -> &str {
+            &self.message_en
         }
 
         pub fn source_error(&self) -> Option<&anyhow::Error> {
@@ -297,6 +314,7 @@ fn get_enum_method(ident: &Ident, new_ident: &Ident, data_error: &DetailErrorEnu
                     biz_info.get_http_status(),
                     biz_info.get_biz_message(),
                     biz_info.get_message_zh(),
+                    biz_info.get_message_en(),
                 )
             }
         };

@@ -4,7 +4,7 @@ use faststr::FastStr;
 use jiff::{Timestamp, TimestampDisplayWithOffset, tz::TimeZone};
 use logforth::{
     Diagnostic, Error,
-    kv::{Key, Value, Visitor},
+    kv::{KeyView, ValueView, Visitor},
     layout::text::colored::{Color, ColoredString, Colorize},
     record::{Level, Record},
 };
@@ -21,7 +21,7 @@ pub(super) struct RecordLine<'a> {
     target: &'a str,
     file: &'a str,
     line: u32,
-    message: &'a str,
+    message: String,
     #[serde(skip_serializing_if = "Map::is_empty")]
     kvs: Map<String, serde_json::Value>,
     #[serde(skip_serializing_if = "Map::is_empty")]
@@ -44,7 +44,7 @@ struct KvCollector<'a> {
 }
 
 impl Visitor for KvCollector<'_> {
-    fn visit(&mut self, key: Key, value: Value) -> Result<(), Error> {
+    fn visit(&mut self, key: KeyView, value: ValueView) -> Result<(), Error> {
         let key = key.to_string();
         match serde_json::to_value(&value) {
             Ok(value) => self.kvs.insert(key, value),
@@ -87,7 +87,7 @@ impl<'a> RecordLine<'a> {
             target: record.target(),
             file: record.file().unwrap_or_default(),
             line: record.line().unwrap_or_default(),
-            message: record.payload(),
+            message: record.payload().to_string(),
             kvs,
             diags,
             log_id,
@@ -111,8 +111,8 @@ impl<'a> RecordLine<'a> {
         self.line
     }
 
-    pub fn message(&self) -> &'a str {
-        self.message
+    pub fn message(&self) -> &str {
+        &self.message
     }
 
     pub fn time(&self) -> &TimestampDisplayWithOffset {

@@ -29,4 +29,6 @@ pub(crate) struct DetailErrorVariant {
     // 这里表示从 `FromMeta` 中取数据，这里特指 `#[detail(message="detail message")]`
     #[darling(default)]
     pub(crate) message_zh: Option<String>,
+    #[darling(default)]
+    pub(crate) message_en: Option<String>,
 }

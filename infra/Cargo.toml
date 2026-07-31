@@ -11,9 +11,6 @@ serde_json = { workspace = true }                   # JSON 序列化支持
 # ===== 异步运行时 =====
 tokio = { workspace = true, features = ["full"] } # 异步运行时，启用全部功能
 
-# ===== ORM 数据库 =====
-toasty = { workspace = true } # toasty ORM 框架
-
 # ===== 系统信息 =====
 num_cpus = { workspace = true } # 获取 CPU 核心数
 

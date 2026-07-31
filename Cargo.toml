@@ -5,15 +5,15 @@ resolver = "3"
 
 [workspace.dependencies]
 # ===== 过程宏相关依赖 =====
-syn = "2"         # Rust 语法树解析
+syn = "3"         # Rust 语法树解析
 quote = "1"       # Rust token 流生成
-darling = "0.23"  # 派生宏属性解析辅助库
+darling = "0.24"  # 派生宏属性解析辅助库
 proc-macro2 = "1" # 过程宏 token 流处理
 
 # ===== 错误处理与工具库 =====
 anyhow = "1"      # 通用错误类型，用于应用程序层错误处理
 thiserror = "2"   # 自定义错误类型的 derive 宏
-unescaper = "0.1" # 字符串转义处理工具
+unescaper = "0.2" # 字符串转义处理工具
 
 # ===== 序列化/反序列化 =====
 serde = "1"      # Rust 序列化框架核心库，支持 JSON、YAML 等格式
@@ -22,10 +22,6 @@ serde_json = "1" # JSON 格式的 serde 实现
 # ===== 代码生成辅助 =====
 heck = "0.5" # 大小写转换工具（如 camelCase、snake_case）
 
-# ===== ORM 数据库 =====
-toasty = { version = "0.7", features = [
-    "postgresql",
-] } # 异步 ORM 框架，支持 PostgreSQL
 
 # ===== 对象构建器 =====
 derive_builder = "0.20" # 自动生成 Builder 模式的 derive 宏
@@ -43,7 +39,7 @@ validator = { version = "0.20", features = ["derive"] } # 数据验证框架，�
 
 # ===== 日志系统 =====
 log = "0.4"       # Rust 标准日志门面接口
-logforth = "0.29" # 结构化日志框架，支持多种输出格式
+logforth = "0.30" # 结构化日志框架，支持多种输出格式
 
 # ===== 时间处理 =====
 jiff = "0.2" # 高性能日期时间处理库
@@ -131,7 +127,7 @@ bcrypt = "0.19" # bcrypt 密码哈希算法实现
 md-5 = "0.10"    # MD5 哈希算法
 sha2 = "0.10"    # SHA-2 系列哈希算法（SHA256, SHA512）
 hmac = "0.12"    # HMAC 消息认证码
-aes-gcm = "0.10" # AES-GCM 对称加密
-base64 = "0.22"  # Base64 编解码
+aes-gcm = "0.11" # AES-GCM 对称加密
+base64 = "0.23"  # Base64 编解码
 
 getset = "0.1"
